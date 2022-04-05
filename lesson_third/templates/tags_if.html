@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tags</title>
+    <style>
+        h2
+        {
+            color: red;
+            text-decoration: underline;
+        }
+        span
+        {
+            color: blue;
+            font-size: 22px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tags</h1>
+    <h2>if/else</h2>
+    {% if user %}
+        <h4>{{user}}</h4>
+    {% endif %}
+
+    {% if list %}
+        <p>{{ list }}</p>
+    {% endif %}
+
+    {% if list or some_var %}
+        <span>There are some list or some_var</span>
+    {% endif %}
+
+<h3>Вложенный IF</h3>
+{% if list %}
+    {% if list|length != 2 %}
+        <p>{{ list }}</p>
+    {% endif %}
+{% endif %}
+
+<h3>Операторы ==, !=, <, >, >=, <=, in</h3>
+    <p>Оператор "=="</p>
+        {% if x == "x value" %}
+            <span>{{ x }}</span>
+        {% endif %}
+    <hr>
+
+    <p>Оператор "!="</p>
+    {% if x != "y value" %}
+        <span>x != "y value"</span>
+    {% endif %}
+    <hr>
+
+    <p>Оператор "<"</p>
+    {% if value < 15 %}
+        <span>if value < 15 -> {{ value }}</span>
+    {% endif %}
+
+    <hr>
+    <p>Оператор ">"</p>
+    {% if value > 5 %}
+        <span>if value > 5 -> {{ value }}</span>
+    {% endif %}
+
+    <hr>
+    <p>Оператор ">="</p>
+    {% if value >= 10 %}
+        <span>if value >= 10 -> {{ value }}</span>
+    {% endif %}
+
+
+</body>
+</html>

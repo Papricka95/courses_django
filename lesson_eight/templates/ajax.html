@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    {% block javascripts %}
+    {% endblock %}
+</head>
+<body>
+<h1>Hello ajax!</h1>
+{% if user.is_authenticated %}
+<a href="logout">Выйти ({{ user.username }})</a>
+
+{% else %}
+<a href="register">Регистрация на сайте</a>
+<a href="login">Авторизация</a>
+{% endif %}
+
+{% if user.is_authenticated %}
+<table id="table_id" border="1" cellpadding="7px">
+    <tr style="background: blue; color: white">
+        <td>ID</td>
+        <td>Имя</td>
+        <td>Фамилия</td>
+        <td>Дата рождения</td>
+        <td>Компания</td>
+        <td>Должность</td>
+        <td>Язык программирования</td>
+        <td>Зарплата</td>
+    </tr>
+  {% for human in humans %}
+      <tr>
+        <td>{{ human.pk }}</td>
+        <td>{{ human.name }}</td>
+        <td>{{ human.surname }}</td>
+        <td>{{ human.birth }}</td>
+        <td>{{ human.company }}</td>
+        <td>{{ human.position }}</td>
+        <td>{{ human.language }}</td>
+        <td>{{ human.salary }}</td>
+      </tr>
+  {% endfor %}
+  </table>
+
+<form id="add_human" action="add_human/" method="post">
+
+{% csrf_token %}
+{% for field in human_form %}
+    <label for="">{{ field.label }}</label>
+    <div>{{ field }}</div>
+{% endfor %}
+    <button type="submit">Добавить в таблицу</button>
+</form>
+<a href="show_three" id="show_three">Показать первые 3 записи</a>
+<a href="show_four" id="show_four">Показать первые 4 записи</a>
+
+
+{% endif %}
+
+<script>
+    $(document).ready(function () {
+        $('#add_human').submit(function (e) { // e - event
+            e.preventDefault(); //отмена стандартного обработчика submit - переправить на action с каким то результатом
+            $.ajax({
+                method: "POST",
+                url: $(this).attr('action'), //this будет ссылаться на текущий элемент, который вызвал это событие (вызвала форма add_human) и забирать значение по ключу action - значение 'add_human/'
+                data: {
+                    'name': $('#id_name').val(),
+                    'surname': $('#id_surname').val(),
+                    'birth': $('#id_birth').val(),
+                    'company': $('#id_company').val(),
+                    'position': $('#id_position').val(),
+                    'language': $('#id_language').val(),
+                    'salary': $('#id_salary').val()
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('form')[0].reset(); //очистит нашу форму. Мы заберем по селектору form - на строке 46. reset сбросит все значения
+                    var table_row = '<tr><td>' +
+                                data.elements[i].name + '</td><td>' + data.elements[i].surname + '</td><td>' +
+                                data.elements[i].birth + '</td><td>' + data.elements[i].company + '</td><td>' +
+                                data.elements[i].position + '</td><td>' + data.elements[i].language + '</td><td>' +
+                                data.elements[i].salary + '</td></tr>';
+
+                                $('table').append(table_row);
+                }
+
+            })
+        })
+    })
+</script>
+<script>
+    $(document).ready(function() { //Ф-ия обработчик срабатывает когда док. полностью прогружается.
+
+        function ajax_setup(e) { // e - event. То, что должно произойти по клику
+            e.preventDefault(); // отмена стандартного обработчика события (переход по ссылке при клике) и ниже переопределяем его ниже.
+            $.ajax({ // отправляем ajax запрос
+                method: "GET", // какой метод будет использоваться
+                url: $(this).attr('href'), //this - указывает на целевой элемент по которому возникло это событие (по клику по ссылке href), т.е заберем по ключу href заберем значение 'show_three'
+                                           //то есть в url запишем 'show_three'
+                data: "",
+                dataType: 'json', //какой тип данных должен вернуться с нашего сервера - тип ответа
+                success: function (data) { // data - пришла с сервера
+                    console.log(data);
+                    $("#table_id tr:not(:first-child)").remove();
+                    for (var i = 0; i < data.elements.length; ++i)
+                    {
+                        var table_row = '<tr><td>' +
+                                data.elements[i].id + '</td><td>' + data.elements[i].name + '</td><td>' + data.elements[i].surname + '</td><td>' +
+                                data.elements[i].birth + '</td><td>' + data.elements[i].company + '</td><td>' +
+                                data.elements[i].position + '</td><td>' + data.elements[i].language + '</td><td>' +
+                                data.elements[i].salary + '</td></tr>';
+
+                                $('table').append(table_row);
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            })
+        }
+
+        $('#show_three').click(ajax_setup);
+        $('#show_four').click(ajax_setup);
+
+        })
+
+</script>
+
+</body>
+</html>
+
+

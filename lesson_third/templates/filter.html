@@ -1,0 +1,63 @@
+{% load poll_extras %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+      h3
+      {
+        text-decoration: underline;
+        color: darkblue;
+      }
+      ol.filters li span
+      {
+        font-size: 32px;
+        color: red;
+      }
+    </style>
+
+</head>
+<body>
+  <h2>Фильтры :)</h2>
+    <h3>Стандартные фильтры!</h3>
+  <ol class="filters">
+    <li>Фильтр <span>add</span> (10|add:2) : {{value|add:2}}</li> <!--Добавляем к value с помощью фильтра add число 2 -->
+    <li>Фильтр <span>add</span> (first|add:second) : {{first|add:second}}</li> <!-- Конкатенирует два массива -->
+    <li>Фильтр <span>addslashes</span> (str|addslashes) : {{str|addslashes}}</li> <!-- добавляет слэш для кавычек -->
+    <li>Фильтр <span>capfirst</span> (name|capfirst) : {{name|capfirst}}</li> <!-- Делает первую букву заглавной -->
+    <li>Фильтр <span>cut</span> (str|cut:" ") : {{str|cut:" "}}</li> <!-- Обрезает строку по указанному параметру -->
+    <li>Фильтр <span>date</span> (date|date:"D d M Y) : {{date|date:"D d M Y"}}</li>
+    <li>Фильтр <span>date</span> (date|date:"DATE_FORMAT") : {{date|date:"DATE_FORMAT"}}</li>
+    <li>Фильтр <span>date</span> (date|date:"DATETIME_FORMAT") : {{date|date:"DATETIME_FORMAT"}}</li>
+    <li>Фильтр <span>date</span> (date|date:"SHORT_DATE_FORMAT") : {{date|date:"SHORT_DATE_FORMAT"}}</li>
+    <!--  -->
+    <p>
+      D - день недели, 3-х буквенное тектовое название. d - День месяца, 2 цифры с ведущим нулем. От '01' до '31'
+      M - название месяца, текстовое, 3-х буквенное. Y - Год, 4 цифры.
+    </p>
+    <li>Фильтр <span>default</span> (empty_one|default:"variable is empty") : {{empty_one|default:"variable is empty"}}</li> <!-- если значение не задано, то задает дефолтное значение -->
+    <li>Фильтр <span>dictsort</span> (for_sort|dictsort:"name") : {{for_sort|dictsort:"name"}}</li> <!-- сортирует по указанному ключу :) -->
+    <li>Фильтр <span>divisibleby</span> (value|divisibleby:"2") ({{value}}/2)? : {{value|divisibleby:"2"}}</li> <!-- возвращает ТРУ, если деление нацело, иначе FALSE -->
+    <li>Фильтр <span>first</span> (first|first) : {{first|first}}</li> <!-- Выводит первый элемент массива -->
+    <li>Фильтр <span>last</span> (first|last) : {{first|last}}</li> <!-- Выводит последний элемент массива -->
+    <li>Фильтр <span>floatformat</span> (float|floatformat) : {{float|floatformat:2}}</li> <!-- Выводит число с точностью до 2 знака после запятой -->
+    <li>Фильтр <span>get_digit</span> (number|get_digit) 12345678 : {{number|get_digit:3}}</li> <!-- Выводит, в данном случае, третью цифру с конца числа number  -->
+    <li>Фильтр <span>join</span> (first|join:"///") : {{first|join:"манул"}}</li> <!-- Задает, какой будет новый разделитель между элементами массива  -->
+    <li>Фильтр <span>length</span> (first|length) : {{first|length}}</li> <!-- Возвращает длину массива first  -->
+    <li>Фильтр <span>length_is</span> (first|length_is: "4") : {{first|length_is:"4"}}</li> <!-- Возвращает TRUE если длина совпадает с заданной - 4.  -->
+    <li>Фильтр <span>lower</span> (str|lower) : {{str|lower}}</li> <!-- Возвращает символы в нижнем регистре  -->
+    <li>Фильтр <span>upper</span> (str|upper) : {{str|upper}}</li> <!-- Возвращает символы в верхнем регистре  -->
+    <li>Фильтр <span>make_list</span> (str|make_list) : {{str|make_list}}</li> <!-- Возвращает символы в виде списка  -->
+    <li>Фильтр <span>slice</span> (second|slice:"3") : {{second|slice:"3"}}</li> <!-- Возвращает срез списка  -->
+    <li>Фильтр <span>wordcount</span> (str|wordcount) : {{str|wordcount}}</li> <!-- Возвращает количество СЛОВ в строке  -->
+    <li>Фильтр <span>yesno</span> (boolean_var|yesno:"yeah,no,maybe") : {{boolean_var|yesno:"yeah,no,maybe"}}</li> <!-- Возвращает количество СЛОВ в строке  -->
+  </ol>
+
+  <h3>Свои фильтры!</h3>
+    <br>Доступны только в платных версиях АХАХААХ (Professional) - (после некоторых манипуляций оказалось, что не только в платных!)
+    <span> Без фильтра: {{name_low}}</span><br>
+    <span> Со своим фильтром <span style="color: red; font-size: 24px;">my_lower_filter</span> : {{name_low|my_lower_filter}}</span>
+  <span>{{text}}</span>
+</body>
+</html>

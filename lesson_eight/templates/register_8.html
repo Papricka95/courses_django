@@ -1,0 +1,53 @@
+{% extends "ajax.html" %}
+
+{% block javascripts %}
+    <script>
+    $(document).ready(function () { //Ф-ия обработчик срабатывает когда док. полностью прогружается. След.строчка считает селектор id_email
+        $('#id_email').on('blur', validate); // по событию blur(когда убираем фокус с поля - щелкаем по другой области), будет запускаться функция validate
+        function validate(){
+            var email = $('#id_email').val(); // val возвращает то значение, которое ввели в email (это input type="email".. )
+            $.ajax({ // отправляем ajax запрос
+                method: "GET", // какой метод будет использоваться
+                url: '/lesson_eight/validate_email/', //то, куда будет отправлять ajax запрос
+                data: { // что будем отправлять - значение, которое забрали с нашего input
+                    'email': email
+                },
+                dataType: 'json', //какой тип данных должен вернуться с нашего сервера - тип ответа
+                success: function (data) { // data - пришла с сервера
+                    console.log(data);
+                    if (data["is_taken"]) { //
+                        $(".error-mail").text(data["is_taken"]); //забираем в error-email(оно ниже в html части и будет в дальнейшем отображаться) значение ключа is_taken
+                        $('#btn').attr('disabled', 'disabled'); //делаем отправки формы на сервер невозможной - блок кнопки
+                    }
+                    else if (data.ok) { // если пришло с сервера, что нет такого пользователя в БД
+                        $('.error-mail').text(''); //очищаем error
+                        $('#btn').removeAttr('disabled');//удаляем блок кнопки
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            })
+        }
+    })
+    </script>
+{% endblock %}
+
+{% block login %}
+<form action="register" method="post"> {% csrf_token %}
+
+{% for field in form %}
+    <div class="form-group">
+    <label for="">{{ field.label }}</label>
+    <div>{{field}}</div>
+    {% if field.errors %}
+    <p>{{ field.errors }}</p>
+    {% endif %}
+    </div>
+{% endfor %}
+
+<p class='error-mail'></p>
+<button id="btn" type="submit">Регистрация</button>
+</form>
+
+{% endblock %}
